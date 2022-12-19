@@ -1,27 +1,89 @@
-# TF Module Template
+# PBS TF SG Rule Module
 
-Version: `0.0.7`
+## Installation
 
-This is the standard template for Terraform modules. This contains some useful scaffolding to create modules that are:
+### Using the Repo Source
 
-1. Well documented
-2. Tested
-3. Shareable
+Use this URL for the source of the module. See the usage examples below for more details.
 
-Repos created off of this template will follow the naming convention `terraform-aws-MOD_NAME`, replacing MOD_NAME with the name of your module.
+```hcl
+github.com/pbs/terraform-aws-sg-rule-module?ref=x.y.z
+```
 
-## TODO
+### Alternative Installation Methods
 
-After creating a repo from this template, your responsibilities are as follows:
+More information can be found on these install methods and more in [the documentation here](./docs/general/install).
 
-- [ ] Run the [wizard.sh](/scripts/wizard.sh) script (`./scripts/run.sh ./scripts/wizard.sh`) to populate the boilerplate placeholders with their appropriate values. This includes the proper name of the module and a standardized slug. These values are automatically populated from the name of the repository, but can be adjusted at your discretion.
-- [ ] Update [main.tf](/main.tf), [outputs.tf](/outputs.tf), [required.tf](/required.tf) and [optional.tf](/optional.tf) with the configuration for your module (delete files you don't need).
-- [ ] Double check that the [terraform.tf](/terraform.tf) and [.tool-versions](/.tool-versions) files have the appropriate versions for resources you are going to use. For major updates, consider updating this template!
-- [ ] Create some [examples](/examples) of your module being used. Remember that the examples there will be used for tests that run in real AWS accounts!
-- [ ] Create some [tests](/tests) to validate the proper configuration of your module. See instructions [here](/docs/general/dev).
-- [ ] Update [README-HEADER.md](/README-HEADER.md) based on the properties of your module. This file will replace the README.md on commit if you follow the instructions [here](/docs/general/dev).
-- [ ] Add the git hooks listed under ## Hooks [here](/docs/general/dev). These scripts run as part of the CI, but your development experience will be smoother if you have them running locally as well.
-- [ ] Add this template as a remote (`git remote add template git@github.com:pbs/terraform-aws-template.git`). This can be used to allow you to merge back any changes you like from the template into your module.
-- [ ] Add your repo in [the service catalog][service-catalog].
+## Usage
 
-[service-catalog]: https://github.com/pbs/pbs-tf-service-catalog
+This module provisions a security group rule. Use in conjunction with other modules to modify ingress and egress rules on security groups provisioned by them.
+
+Integrate this module like so:
+
+```hcl
+module "sg_rule" {
+  source = "github.com/pbs/terraform-aws-sg-rule-module?ref=x.y.z"
+
+  port = 6379
+
+  security_group_id        = module.redis.sg_ids[0]
+  source_security_group_id = module.lambda.sg
+}
+```
+
+## Adding This Version of the Module
+
+If this repo is added as a subtree, then the version of the module should be close to the version shown here:
+
+`x.y.z`
+
+Note, however that subtrees can be altered as desired within repositories.
+
+Further documentation on usage can be found [here](./docs).
+
+Below is automatically generated documentation on this Terraform module using [terraform-docs][terraform-docs]
+
+---
+
+[terraform-docs]: https://github.com/terraform-docs/terraform-docs
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.2 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.5.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.35.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_security_group_rule.rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_security_group_id"></a> [security\_group\_id](#input\_security\_group\_id) | The ID of the security group that contains the rule. | `string` | n/a | yes |
+| <a name="input_from_port"></a> [from\_port](#input\_from\_port) | The start port | `number` | `null` | no |
+| <a name="input_port"></a> [port](#input\_port) | The port to allow. | `number` | `null` | no |
+| <a name="input_protocol"></a> [protocol](#input\_protocol) | The protocol to allow. Valid values are tcp, udp, and all. | `string` | `"tcp"` | no |
+| <a name="input_source_cidr_blocks"></a> [source\_cidr\_blocks](#input\_source\_cidr\_blocks) | A list of CIDR blocks to allow access from. | `list(string)` | `null` | no |
+| <a name="input_source_ipv6_cidr_blocks"></a> [source\_ipv6\_cidr\_blocks](#input\_source\_ipv6\_cidr\_blocks) | A list of IPv6 CIDR blocks to allow access from. | `list(string)` | `null` | no |
+| <a name="input_source_security_group_id"></a> [source\_security\_group\_id](#input\_source\_security\_group\_id) | The ID of the security group that is allowed access. | `string` | `null` | no |
+| <a name="input_to_port"></a> [to\_port](#input\_to\_port) | The end port | `number` | `null` | no |
+| <a name="input_type"></a> [type](#input\_type) | The type of rule to create. Valid values are egress, ingress, and all. | `string` | `"ingress"` | no |
+
+## Outputs
+
+No outputs.

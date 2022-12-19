@@ -1,4 +1,4 @@
-output "hello_world" {
-  description = "Hello World"
-  value       = module.MOD_SHORTNAME.hello_world
+output "lambda_name" {
+  description = "The name of the lambda function"
+  value       = module.lambda.name
 }

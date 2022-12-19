@@ -1,4 +1,4 @@
-# PBS TF MOD_TITLE
+# PBS TF SG Rule Module
 
 ## Installation
 
@@ -7,7 +7,7 @@
 Use this URL for the source of the module. See the usage examples below for more details.
 
 ```hcl
-github.com/pbs/terraform-aws-MOD_NAME?ref=x.y.z
+github.com/pbs/terraform-aws-sg-rule-module?ref=x.y.z
 ```
 
 ### Alternative Installation Methods
@@ -16,28 +16,18 @@ More information can be found on these install methods and more in [the document
 
 ## Usage
 
-<!-- TODO -->
-This should be a basic description of what this module does.
-Fill this out before completing usage of this template.
-<!-- TODO -->
+This module provisions a security group rule. Use in conjunction with other modules to modify ingress and egress rules on security groups provisioned by them.
 
 Integrate this module like so:
 
 ```hcl
-module "MOD_SHORTNAME" {
-  source = "github.com/pbs/terraform-aws-MOD_NAME?ref=x.y.z"
+module "sg_rule" {
+  source = "github.com/pbs/terraform-aws-sg-rule-module?ref=x.y.z"
 
-  <!-- TODO -->
-  Show some examples of valid values for required parameters.
-  <!-- TODO -->
+  port = 6379
 
-  # Tagging Parameters
-  organization = var.organization
-  environment  = var.environment
-  product      = var.product
-  repo         = var.repo
-
-  # Optional Parameters
+  security_group_id        = module.redis.sg_ids[0]
+  source_security_group_id = module.lambda.sg
 }
 ```
 

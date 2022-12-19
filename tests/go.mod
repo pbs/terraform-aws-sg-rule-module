@@ -1,4 +1,4 @@
-module github.com/pbs/terraform-aws-MOD_NAME
+module github.com/pbs/terraform-aws-sg-rule-module
 
 go 1.13
 
