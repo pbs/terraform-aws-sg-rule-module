@@ -38,7 +38,8 @@ module "sg_rule" {
 
   security_group_id = module.redis.sg_ids[0]
 
-  port = 6379
+  description = "Allow Lambda ${module.lambda.name} to access Redis"
 
+  port                     = 6379
   source_security_group_id = module.lambda.sg
 }

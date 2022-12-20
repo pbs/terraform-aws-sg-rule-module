@@ -1,5 +1,6 @@
 resource "aws_security_group_rule" "rule" {
   security_group_id        = var.security_group_id
+  description              = var.description
   type                     = var.type
   from_port                = local.from_port
   to_port                  = local.to_port

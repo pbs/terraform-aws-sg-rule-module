@@ -18,15 +18,19 @@ More information can be found on these install methods and more in [the document
 
 This module provisions a security group rule. Use in conjunction with other modules to modify ingress and egress rules on security groups provisioned by them.
 
+Note that each security group rule requires an explicit description. Try to make these as descriptive as possible.
+
 Integrate this module like so:
 
 ```hcl
 module "sg_rule" {
   source = "github.com/pbs/terraform-aws-sg-rule-module?ref=x.y.z"
 
-  port = 6379
+  security_group_id = module.redis.sg_ids[0]
 
-  security_group_id        = module.redis.sg_ids[0]
+  description = "Allow Lambda ${module.lambda.name} to access Redis"
+
+  port                     = 6379
   source_security_group_id = module.lambda.sg
 }
 ```
@@ -74,6 +78,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_description"></a> [description](#input\_description) | Description of the rule. This must clearly describe the purpose of the rule. | `string` | n/a | yes |
 | <a name="input_security_group_id"></a> [security\_group\_id](#input\_security\_group\_id) | The ID of the security group that contains the rule. | `string` | n/a | yes |
 | <a name="input_from_port"></a> [from\_port](#input\_from\_port) | The start port | `number` | `null` | no |
 | <a name="input_port"></a> [port](#input\_port) | The port to allow. | `number` | `null` | no |
